@@ -15,16 +15,19 @@ class Media {
 
 	let gateKeeper = Gatekeeper.shared
 
-	init?(name: String, data: [String: String]) {
+	init?(name: String) {
 		self.name = name
-		self.data = data
 
 //		gateKeeper.delegate = self
 
 		// request info from Gatekeeper asynchronously
-		gateKeeper.requestData(media: "reddit") { responseObject, error in
+		gateKeeper.requestData(media: "reddit") { responseValue, error in
+			if(error != nil) {
+				// Throw
+				return
+			}
 			// handle response
-			print(responseObject)
+			self.data = ["gunners": responseValue as! String]
 		}
 	}
 

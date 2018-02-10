@@ -7,12 +7,28 @@
 //
 
 import UIKit
+import WebKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, WKNavigationDelegate {
+	var webView: WKWebView!
+	var reddit: Media?
+
+	override func loadView() {
+		webView = WKWebView()
+		webView.navigationDelegate = self
+		view = webView
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
+		if(reddit?.data["gunners"] == nil){
+			sleep(2)
+		}
+		//TODO: Modify
+		let string = "https://www.reddit.com" + (reddit?.data["gunners"])!
+		let url = URL(string: string)
+		webView.load(URLRequest(url: url!))
+		webView.allowsBackForwardNavigationGestures = true
 	}
 
 	override func didReceiveMemoryWarning() {

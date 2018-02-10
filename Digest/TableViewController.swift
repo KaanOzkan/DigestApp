@@ -27,13 +27,12 @@ class TableViewController: UITableViewController {
 
 	private func loadMedia(){
 		// TODO: populate data when clicked, not upon loading
-		// Probably should be done somewhere else though (?)
 		var redditData = [String: String]()
-		guard let reddit = Media(name: "Reddit", data: redditData) else {
+		guard let reddit = Media(name: "Reddit") else {
 			fatalError("Unable to instantiate Media object, Reddit")
 		}
 		var quoraData = [String: String]()
-		guard let quora = Media(name: "Quora", data: quoraData) else {
+		guard let quora = Media(name: "Quora") else {
 			fatalError("Unable to instantiate Media object, Quora")
 		}
 		media += [reddit, quora]
@@ -64,6 +63,12 @@ class TableViewController: UITableViewController {
 
         return cell
     }
+
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		let destination = segue.destination as! ViewController
+		//TODO: implement logic in viewController to handle various media
+		destination.reddit = self.media[0]
+	}
 
 
     /*

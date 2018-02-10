@@ -19,19 +19,22 @@ class Gatekeeper {
 	static let shared = Gatekeeper()
 //	weak var delegate: GatekeeperDelegate?
 
-	func requestData(media: String, completionHandler: @escaping (NSDictionary?, Error?) -> ()) {
+	func requestData(media: String, completionHandler: @escaping (Any?, Error?) -> ()) {
 		// Switch
 		if(media == "reddit"){
 			getRedditData(completionHandler: completionHandler)
 		}
 	}
 
-	func getRedditData(completionHandler: @escaping (NSDictionary?, Error?) -> ()) {
-		Alamofire.request("https://digestmedia.herokuapp.com").responseJSON { response in
-			switch response.result {
-			case .success(let value):
-				completionHandler(value as? NSDictionary, nil)
-			case .failure(let error):
+	func getRedditData(completionHandler: @escaping (Any?, Error?) -> ()) {
+		Alamofire.request("https://digestmedia.herokuapp.com/media/reddit.json").responseJSON { response in
+			if response.result.isSuccess{
+				let data = response.result.value!
+				completionHandler(data, nil)
+			}
+			else if response.result.isFailure{
+				print("failure")
+				let error : NSError = response.result.error! as NSError
 				completionHandler(nil, error)
 			}
 		}
