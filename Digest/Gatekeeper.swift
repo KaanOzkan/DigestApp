@@ -9,17 +9,11 @@
 import Foundation
 import Alamofire
 
-//// Gatekepper shouldn't know about its drivers
-//protocol GatekeeperDelegate: class {
-//	func didRecieveDataUpdate(data: String)
-//}
-
 class Gatekeeper {
 	static let shared = Gatekeeper()
-//	weak var delegate: GatekeeperDelegate?
+
 
 	func requestData(media: String, completionHandler: @escaping (Any?, Error?) -> ()) {
-		// Switch
 		if(media == "reddit"){
 			getRedditData(completionHandler: completionHandler)
 		}

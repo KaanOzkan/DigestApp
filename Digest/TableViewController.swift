@@ -8,17 +8,22 @@
 
 import UIKit
 
+// Reload
+extension TableViewController: DataModelDelegate {
+	func didRecieveDataUpdate() {
+		DispatchQueue.main.async() {
+			self.tableView.reloadData()
+		}
+	}
+}
 class TableViewController: UITableViewController {
 	var media = [Media]()
 	var subredditLink: String?
     override func viewDidLoad() {
         super.viewDidLoad()
 		loadMedia()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,26 +32,20 @@ class TableViewController: UITableViewController {
     }
 
 	private func loadMedia(){
-		// TODO: populate data when clicked, not upon loading
-		guard let reddit = Media(name: "reddit", vc: self) else {
+		guard let reddit = Media(name: "reddit") else {
 			fatalError("Unable to instantiate Media object, Reddit")
 		}
-//		var quoraData = [String: String]()
-//		guard let quora = Media(name: "quora") else {
-//			fatalError("Unable to instantiate Media object, Quora")
-//		}
+		reddit.delegate = self
 		media = [reddit]
 	}
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return media[0].data.count
     }
 
@@ -56,10 +55,11 @@ class TableViewController: UITableViewController {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
 
-		// Create an array from dictionary to access indices
 		if (self.media[0].data.count == 0) {
 			return cell
 		}
+
+		// Create an array from dictionary to access indices
 		let array = Array(self.media[0].data)
 		let subreddit = array[indexPath.row].key
 		cell.label.text = subreddit

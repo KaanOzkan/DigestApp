@@ -21,7 +21,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		//TODO: Modify
+
 		let string = "https://www.reddit.com" + (subredditLink)!
 		let url = URL(string: string)
 		webView.load(URLRequest(url: url!))
