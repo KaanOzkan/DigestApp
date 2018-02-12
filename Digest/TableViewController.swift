@@ -10,6 +10,7 @@ import UIKit
 
 class TableViewController: UITableViewController {
 	var media = [Media]()
+	var subredditLink: String?
     override func viewDidLoad() {
         super.viewDidLoad()
 		loadMedia()
@@ -27,15 +28,14 @@ class TableViewController: UITableViewController {
 
 	private func loadMedia(){
 		// TODO: populate data when clicked, not upon loading
-		var redditData = [String: String]()
-		guard let reddit = Media(name: "Reddit") else {
+		guard let reddit = Media(name: "reddit", vc: self) else {
 			fatalError("Unable to instantiate Media object, Reddit")
 		}
-		var quoraData = [String: String]()
-		guard let quora = Media(name: "Quora") else {
-			fatalError("Unable to instantiate Media object, Quora")
-		}
-		media += [reddit, quora]
+//		var quoraData = [String: String]()
+//		guard let quora = Media(name: "quora") else {
+//			fatalError("Unable to instantiate Media object, Quora")
+//		}
+		media = [reddit]
 	}
 
     // MARK: - Table view data source
@@ -47,7 +47,7 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return media.count
+        return media[0].data.count
     }
 
 
@@ -56,20 +56,33 @@ class TableViewController: UITableViewController {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! TableViewCell
 
-	    // Configure the cell...
-
-		let media = self.media[indexPath.row]
-		cell.label.text = media.name
-
+		// Create an array from dictionary to access indices
+		if (self.media[0].data.count == 0) {
+			return cell
+		}
+		let array = Array(self.media[0].data)
+		let subreddit = array[indexPath.row].key
+		cell.label.text = subreddit
         return cell
     }
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		let destination = segue.destination as! ViewController
 		//TODO: implement logic in viewController to handle various media
-		destination.reddit = self.media[0]
+		print("preparing")
+		destination.subredditLink = self.subredditLink
 	}
 
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print("You selected cell #\(indexPath.row)!")
+
+		// Get Cell Label
+		let indexPath = tableView.indexPathForSelectedRow
+		let currentCell = tableView.cellForRow(at: indexPath!) as! TableViewCell
+		let key = currentCell.label.text
+		self.subredditLink = self.media[0].data[key!]
+		performSegue(withIdentifier: "default", sender: self)
+	}
 
     /*
     // Override to support conditional editing of the table view.
@@ -106,14 +119,5 @@ class TableViewController: UITableViewController {
     }
     */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 
 //// Gatekepper shouldn't know about its drivers
 //protocol GatekeeperDelegate: class {
@@ -33,7 +32,7 @@ class Gatekeeper {
 				completionHandler(data, nil)
 			}
 			else if response.result.isFailure{
-				print("failure")
+				print("Couldn't get a reddit response")
 				let error : NSError = response.result.error! as NSError
 				completionHandler(nil, error)
 			}

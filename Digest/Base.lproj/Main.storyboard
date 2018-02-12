@@ -52,7 +52,6 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="label" destination="8s3-Ag-iwP" id="YrB-xB-b8P"/>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="8nE-2m-CrY"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -62,6 +61,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Media" id="dhL-kA-BEm"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="default" id="1oI-5Y-mXE"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9aj-co-wTi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -11,7 +11,7 @@ import WebKit
 
 class ViewController: UIViewController, WKNavigationDelegate {
 	var webView: WKWebView!
-	var reddit: Media?
+	var subredditLink: String?
 
 	override func loadView() {
 		webView = WKWebView()
@@ -21,11 +21,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		if(reddit?.data["gunners"] == nil){
-			sleep(2)
-		}
 		//TODO: Modify
-		let string = "https://www.reddit.com" + (reddit?.data["gunners"])!
+		let string = "https://www.reddit.com" + (subredditLink)!
 		let url = URL(string: string)
 		webView.load(URLRequest(url: url!))
 		webView.allowsBackForwardNavigationGestures = true

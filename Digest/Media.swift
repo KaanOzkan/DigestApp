@@ -7,33 +7,37 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 class Media {
 	// MARK: Properties
 	var name: String
+	var names = [String]()
 	var data = [String: String]()
+	var vc: UITableViewController // Fix
 
 	let gateKeeper = Gatekeeper.shared
 
-	init?(name: String) {
+	init?(name: String, vc: UITableViewController) {
 		self.name = name
-
+		self.vc = vc
 //		gateKeeper.delegate = self
 
 		// request info from Gatekeeper asynchronously
-		gateKeeper.requestData(media: "reddit") { responseValue, error in
+		gateKeeper.requestData(media: self.name) { responseValue, error in
 			if(error != nil) {
 				// Throw
 				return
 			}
 			// handle response
-			self.data = ["gunners": responseValue as! String]
+			var json = JSON(responseValue!)
+			self.data = json.dictionaryObject as! [String:String]
+			print(self.data)
+			print("reloading")
+			DispatchQueue.main.async() {
+				self.vc.tableView.reloadData()
+			}
+
 		}
 	}
-
-//	// Gatekeeper received information
-//	func didRecieveDataUpdate(data: String) {
-//		// data param has necessary info
-//		print(data)
-//	}
 }
